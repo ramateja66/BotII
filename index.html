@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enter Credentials</title>
+    <!-- Include Teams JavaScript SDK -->
+    <script src="https://unpkg.com/@microsoft/teams-js@2.0.0/dist/MicrosoftTeams.min.js"></script>
+</head>
+<body>
+<h1>Enter your credentials</h1>
+<form id="credentialsForm">
+    <label for="username">Username:</label><br>
+    <input type="text" id="username" name="username"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br><br>
+    <input type="submit" value="Submit">
+</form>
+
+<script>
+    document.getElementById('credentialsForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Create an XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+
+        // Configure it: POST-request for the URL where you want to submit credentials
+        xhr.open('POST', 'http://localhost:8080/api/login', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        // Setup a function that will be called when the request succeeds
+        xhr.onload = function() {
+            // Request finished. Do processing here.
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // Successful request
+                console.log(xhr.responseText);
+                 self.close();// Output the response
+                // Optionally, you can handle the response here
+            } else {
+                // Request failed
+                console.error('Request failed with status:', xhr.status);
+            }
+        };
+
+        // Setup a function that will be called when the request fails
+        xhr.onerror = function() {
+            console.error('Request failed');
+        };
+
+        // Send the request with JSON data
+        xhr.send(JSON.stringify({ username: username, password: password }));
+
+
+    });
+    // Initialize the Teams SDK
+    microsoftTeams.initialize();
+</script>
+</body>
+</html>
